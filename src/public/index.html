@@ -12,53 +12,17 @@
         <div class="container" id="app">
             <div class="row" style="padding: 22px;">
                 <div class="col-md-6" style="border: 1px solid red;" >
-                    Map and location
-                    <h1>Altitude</h1>
 
-
-                    <pre>
-                        {{ navdata.altitude }}
-                    </pre>
-
-                    <h1>Demo</h1>
-                    <pre>
-                        {{ navdata.demo }}
-                    </pre>
-
-
-                    <h1>visionDetect</h1>
-                    <pre>
-                        {{ navdata.visionDetect }}
-                    </pre>
-
-
-                    <h1>droneState</h1>
-                    <pre>
-                        {{ navdata.droneState }}
-                    </pre>
-
-
-                    <h1>sequenceNumber</h1>
-                    <pre>
-                        {{ navdata.sequenceNumber }}
-                    </pre>
-
-
-
-                    <h1>visionFlag</h1>
-                    <pre>
-                        {{ navdata.visionFlag }}
-                    </pre>
-
-
-                    <input type="button" value="click me to send location " @click="generateLocation">
                 </div>
 
                 <div class="col-md-6" style="border: 1px solid green;">
                     Camera
+
+
+
+                    <img :src="video_png" />
                 </div>
             </div>
-
         </div>
 
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -72,36 +36,29 @@
                 el: '#app',
                 data: {
                     message: 'Hello Vue!',
-                    navdata: {}
-
-
+                    navdata: {},
+                    video_png:'img/frame.png',
                 },
 
                 mounted() {
-
                     let _this = this;
+
                     socket.on('chanel.drone-nav-data', function (data) {
+                        // _this.navdata = data.navdata;
+ 
+                        console.log("data ", data);
 
-                        // console.log(" message detail ", data);
+                        _this.video_png = 'img/frame' + data.frameCounter + '.png';
 
-
-
-                        _this.navdata = data.navdata;
-
-
-                        // _this.messageDetails.push(data.message_detail);
-                        //
-                        // _this.message.typing.active = false;
+                         _this.$forceUpdate();
                     });
                 },
 
-                  methods: {
-                    generateLocation() { 
-
-                        socket.emit('chanel.drone-generate-location', {location:'new location'}); 
+                methods: {
+                    generateLocation() {
+                        socket.emit('chanel.drone-generate-location', {location:'new location'});
                     }
                 }
- 
             });
         </script>
     </body>

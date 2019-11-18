@@ -1,160 +1,128 @@
 var arDrone = require('ar-drone');
+var fs = require('fs');
+var rimraf = require("rimraf");
+
+
 var client  = arDrone.createClient();
 client.config('general:navdata_demo', 'FALSE');
 
-console.log(" starting ");
- 
-// client
-//     .after(5000, function() {
-//         this.clockwise(0.5);
-//     })
-//     .after(3000, function() {
-//         this.stop();
-//         this.land();
-//     });
- 
+
+
 let server = require('http').Server();
-//
 let io = require('socket.io')(server);
-//
 server.listen(3000);
 
+var pngStream = arDrone.createClient().getPngStream();
+
+var lastPng;
+var videoBf;
+
+// access the head camera
+// client.config('video:video_channel', 2);
 
 
+// var video = arDrone.createClient().getVideoStream();
 
+// video.on('data', console.log);
 
+ // console.log(" starting ");
 
- // var navData = client.on('navdata', console.log);
-
-
-// console.log(" ------------------------------------------------------ ");
-// console.log(" nav data ", navData.demo);
+// var frameCounter = 0;
+//
 //
 
-// io.emit('chanel.drone-nav-data', {test:''});
-//
+// var pngStream = client.getPngStream();
+var frameCounter = 0;
+var period = 5000; // Save a frame every 5000 ms.
+var lastFrameTime = 0;
+
+
 io.on('connection', function(socket) {
 
-    console.log(" connected");
+    var data = {};
 
-    client.on('navdata', (data)=>{
+    // console.log(" connected");
 
-        socket.emit('chanel.drone-nav-data', {navdata: data});
-
-        // console.log(" new data arrived ");
-
-    });
-
-
-
-
-    //  socket.emit('chanel.drone-nav-data', {navdata: navData});
-
-
-
-   //  socket.on('chanel.drone-generate-location', function(data) {
- 		// console.log(" data ", data);        
-   //  });
-
- 
+    // nav data
+    // client.on('navdata', (navdata)=>{
+    //     data.navdata = navdata;
     //
-    // io.emit('chanel.drone-nav-data', console.log);
+    //     socket.emit('chanel.drone-nav-data', data);
+    // });
+
+    //
+    // // last png
+    // pngStream.on('error', console.log)
+    //     .on('data', function(pngBuffer) {
+    //         lastPng = pngBuffer;
+    //
+    //         data.lasPng = lastPng;
+    //
+    //         socket.emit('chanel.drone-nav-data', data);
+    //     });
+
+
+
+    //
+    // pngStream
+    //     .on('error', console.log)
+    //     .on('data', function(pngBuffer) {
+    //
+    //
+    //         console.log(" png stream test ");
+    //
+    //         // var now = (new Date()).getTime();
+    //         // if (now - lastFrameTime > period) {
+    //         //     frameCounter++;
+    //         //     lastFrameTime = now;
+    //         //     console.log('Saving frame');
+    //         //
+    //         //
+    //         //     fs.writeFile('frame' + frameCounter + '.png', pngBuffer, function(err) {
+    //         //         if (err) {
+    //         //             console.log('Error saving PNG: ' + err);
+    //         //         }
+    //         //     });
+    //         // }
+    //     });
+
+
+    pngStream.on('data', function(videoBuffer) {
+
+
+            data.videoBf = videoBuffer;
+
+
+            var now = (new Date()).getTime();
+            // if (now - lastFrameTime > period) {
+
+
+                frameCounter++;
+
+                lastFrameTime = now;
+
+                // console.log('Saving frame');
+
+                fs.writeFile('src/public/img/frame' + frameCounter + '.png', videoBuffer, function(err) {
+                // fs.writeFile('src/public/img/frame.png', videoBuffer, function(err) {
+                    if (err) {
+                        // console.log('Error saving PNG: ' + err);
+                    }
+                });
+            // }
+
+            if(frameCounter % 1000 == 0) {
+                // console.log(" preparing to delete the folder");
+
+                setTimeout(function () {
+                    rimraf("src/public/img", function () {
+                        console.log("folder deleted");
+                    });
+                }, 2000)
+            }
+
+            data.frameCounter = frameCounter;
+
+            socket.emit('chanel.drone-nav-data', data);
+        });
 });
-
-
-
-
-
-
-
-
-
-
-
-// // var arDrone = require('..');
-// var http    = require('http');
-
-// //var pngStream = arDrone.createClient().getPngStream();
-// var client = arDrone.createClient();
-// client.disableEmergency();
-
-// console.log('Connecting png stream ...');
-// var pngStream = client.getPngStream();
-
-// var lastPng;
-// pngStream
-//     .on('error', console.log)
-//     .on('data', function(pngBuffer) {
-//         lastPng = pngBuffer;
-//     });
-
-// var server = http.createServer(function(req, res) {
-//     if (!lastPng) {
-//         res.writeHead(503);
-//         res.end('Did not receive any png data yet.');
-//         return;
-//     }
-//
-//     res.writeHead(200, {'Content-Type': 'image/png'});
-//     res.end(lastPng);
-// });
-
-// Connection established
-// server.listen(8080, function() {
-//     console.log('Serving latest png on port 8080 ...');
-//
-//
-//
-//
-
-
-
-
-
-
-
-
-//     client.takeoff();
-
-//     client
-//         .after(5000, function() {
-//             this.clockwise(0.5);
-//         })
-//         .after(5000, function() {
-//             this.stop();
-//         })
-//         .after(5000, function() {
-//             this.clockwise(0.5);
-//         })
-//         .after(5000, function() {
-//             this.stop();
-//         })
-//         .after(5000, function() {
-//             this.clockwise(0.5);
-//         })
-//         .after(5000, function() {
-//             this.stop();
-//         })
-//         .after(5000, function() {
-//             this.clockwise(-0.5);
-//         })
-//         .after(5000, function() {
-//             this.stop();
-//         })
-//         .after(5000, function() {
-//             this.clockwise(-0.5);
-//         })
-//         .after(5000, function() {
-//             this.stop();
-//         })
-//         .after(5000, function() {
-//             this.clockwise(-0.5);
-//         })
-//         .after(5000, function() {
-//             this.stop();
-//         })
-//         .after(1000, function() {
-//             this.stop();
-//             this.land();
-//         });
-// });
