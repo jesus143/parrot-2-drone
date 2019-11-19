@@ -1,10 +1,8 @@
 <html>
-
     <head>
         <title>
             Drone monitoring
         </title>
-
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     </head>
 
@@ -12,18 +10,16 @@
         <div class="container" id="app">
             <div class="row" style="padding: 22px;">
                 <div class="col-md-6" style="border: 1px solid red;" >
-
                 </div>
 
                 <div class="col-md-6" style="border: 1px solid green;">
                     Camera
-
-
-
                     <img :src="video_png" />
                 </div>
             </div>
         </div>
+
+
 
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
@@ -35,7 +31,6 @@
             var app = new Vue({
                 el: '#app',
                 data: {
-                    message: 'Hello Vue!',
                     navdata: {},
                     video_png:'img/frame.png',
                 },
@@ -44,13 +39,9 @@
                     let _this = this;
 
                     socket.on('chanel.drone-nav-data', function (data) {
-                        // _this.navdata = data.navdata;
- 
-                        console.log("data ", data);
-
                         _this.video_png = 'img/frame' + data.frameCounter + '.png';
 
-                         _this.$forceUpdate();
+                        _this.$forceUpdate();
                     });
                 },
 

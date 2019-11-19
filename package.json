@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "buffy": "0.0.4",
+    "ffmpeg": "0.0.4",
     "file-system": "^2.2.2",
     "rimraf": "^3.0.0",
     "simple-debug": "~1.1.1"
