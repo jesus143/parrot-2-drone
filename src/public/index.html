@@ -19,8 +19,6 @@
             </div>
         </div>
 
-
-
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
@@ -38,17 +36,19 @@
                 mounted() {
                     let _this = this;
 
+                    // mao ni ang ga accept sa server activity, katong gi pasa gikan sa socket io code: socket.emit('chanel.drone-nav-data', data);
                     socket.on('chanel.drone-nav-data', function (data) {
+
+                        // gi pasa ang image path to a variable
                         _this.video_png = 'img/frame' + data.frameCounter + '.png';
 
+                        // force update client side para ma update ang ui sa website or mobile
                         _this.$forceUpdate();
                     });
                 },
 
                 methods: {
-                    generateLocation() {
-                        socket.emit('chanel.drone-generate-location', {location:'new location'});
-                    }
+                    //
                 }
             });
         </script>
