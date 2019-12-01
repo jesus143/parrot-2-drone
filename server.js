@@ -2,7 +2,7 @@ var arDrone = require('ar-drone');
 var fs = require('fs');
 var rimraf = require("rimraf");
 
-require('events').EventEmitter.prototype._maxListeners = 100;
+// require('events').EventEmitter.prototype._maxListeners = 100;
 
 var client  = arDrone.createClient();
 // client.config('general:navdata_demo', 'FALSE');
@@ -20,8 +20,7 @@ var videoBf;
   
 var frameCounter = 0; 
 var lastFrameTime = 0;
- 
-
+var navData = {};
 
  // access the head camera
 client.config('video:video_channel', 0);
@@ -36,21 +35,42 @@ io.on('connection', function(socket) {
     socket.on('chanel.drone-control', function (control) {         
        console.log(" new control triggered ", control);
 
-        if(control.action == 'left') { 
-            console.log(" go left");
+        if(control.action == 'left') {
+            console.log("left");
+            client.counterClockwise(0.5);
         }       
-        else if(control.action == 'right') { 
-            console.log("go right");
-        }       
-        else if(control.action == 'right') { 
-            console.log("go right");
-        }       
-        else if(control.action == 'bottom') { 
-            console.log("go bottom");
-        }       
-        else if(control.action == 'forward') { 
-            console.log("go forward");
-        }     
+        else if(control.action == 'right') {
+
+            client.clockwise(0.5);
+            console.log("right");
+        }
+        else if(control.action == 'down') {
+            console.log("down");
+            client.down(0.5)
+        }
+        else if(control.action == 'up') {
+            console.log("up");
+            client.up(0.5)
+        }
+        else if(control.action == 'back') {
+            console.log("back");
+            client.back(0.5)
+        }
+        else if(control.action == 'front') {
+            console.log("front");
+
+            client.front(0.5)
+        }
+
+
+
+        if(control.action == 'fly') {
+            console.log(" fly");
+        }
+        else if(control.action == 'land') {
+            console.log(" landing");
+            client.land();
+        }
 
  
         if(control.action == 'topvideo') { 
@@ -62,17 +82,15 @@ io.on('connection', function(socket) {
  
 
     // send nav data
-    client.on('navdata', (data)=>{ 
-            socket.emit('chanel.drone-nav-data', data);
+    client.on('navdata', (data)=>{
+        navData = data;
+            // socket.emit('chanel.drone-nav-data', data);
     });
 
-
-
-
-  
     // send video to the monitoring app
     pngStream.on('data', function(videoBuffer) {
             data.videoBf = videoBuffer;
+            data.navData = navData;
 
             var now = (new Date()).getTime(); 
                 frameCounter++;
@@ -84,16 +102,18 @@ io.on('connection', function(socket) {
                 fs.writeFile('src/public/img/frame' + frameCounter + '.png', videoBuffer, function(err) {
                 // fs.writeFile('src/public/img/frame.png', videoBuffer, function(err) {
                     if (err) {
-                        // console.log('Error saving PNG: ' + err);
+                        console.log('Error saving PNG: ' + err);
+                    } else {
+                        // console.log('successfully saved image');
                     }
                 });
             // }
 
-            if(frameCounter % 1000 == 0) {
+            if(frameCounter % 5000 == 0) {
                 // console.log(" preparing to delete the folder");
 
                 setTimeout(function () {
-                    rimraf("src/public/img", function () {
+                    rimraf("src/public/img/*", function () {
                         console.log("folder deleted");
                     });
                 }, 2000)

@@ -31,14 +31,16 @@ border: 1px solid green;
                     <img :src="video_png" />
                 </div>
                 <div class="col-md-6 room"  > 
+                    <pre>
                         {{ navData }}
+                    </pre>
                 </div>
 
                 <div class="col-md-6 room">
                         <br><br>
 
-                       <button class="btn btn-success" > Fly</button>
-                        <button class="btn btn-danger" > Land</button>
+                       <button class="btn btn-info" v-on:click=greet("fly") > Fly</button>
+                        <button class="btn btn-danger" v-on:click=greet("land") > Land</button>
    
                         <hr>
 
@@ -54,7 +56,8 @@ border: 1px solid green;
                         <button class="btn btn-success" v-on:click=greet("left")> left</button> 
                         <button class="btn btn-success" v-on:click=greet("right")>right</button> 
                         <button class="btn btn-success" v-on:click=greet("down")> down</button>
-                        <button class="btn btn-success" v-on:click=greet("forward")> forward</button>
+                        <bbutton class="btn btn-success" v-on:click=greet("front")> forward</bbutton>
+                        <bbutton class="btn btn-success" v-on:click=greet("back")> backward</bbutton>
 
                                 <hr>
 
@@ -93,19 +96,29 @@ border: 1px solid green;
                         // gi pasa ang image path to a variable
                         _this.video_png = 'img/frame' + data.frameCounter + '.png';
 
+                        _this.navData = data.navData;
+
+
+                        // console.log(data.navdata);
+
+
                         // force update client side para ma update ang ui sa website or mobile
                         _this.$forceUpdate();
                     });
 
 
-                    socket.on('chanel.drone-nav-data', function (navData) {
-
-                                    
-                        _this.navData = navData
-
-
-                        _this.$forceUpdate();
-                    });
+                    // socket.on('chanel.drone-nav-data', function (navData) {
+                    //
+                    //
+                    //     _this.navData = navData
+                    //
+                    //
+                    //
+                    //
+                    //
+                    //
+                    //     _this.$forceUpdate();
+                    // });
 
  
                 },
@@ -113,11 +126,27 @@ border: 1px solid green;
 
                  methods: { 
                         greet: function(action) {
+
+                            let isFly = false;
+
+
                             // console.log("|te" + control);
                             let control = {
                                 'action' : action
                             }
-                            socket.emit('chanel.drone-control', control);
+
+
+                            if(action == 'fly') {
+                                isFly = confirm("ARE YOU SURE, YOU WANT TO FLY THIS DRONE?");
+
+                                if(isFly) {
+                                    socket.emit('chanel.drone-control', control);
+                                }
+                            } else {
+                                socket.emit('chanel.drone-control', control);
+                            }
+
+
 
                         }
                  }
