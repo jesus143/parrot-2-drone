@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+      
+      <style>
+      
+          .room { 
+              border:1px solid #a5a5a5;
+              min-height: 300px;
+              padding:5px;
+          }
+          
+          .ctrl-button { 
+              padding:10px;
+              width:32%;
+          }
+      
+          
+          .table td {
+              padding:0px;
+          }
+          
+          .img{
+              width: 100%;
+          }
+            
+        /* map */
+        .mapouter { 
+            height:500px;
+            width:100% !important;
+          }
+          .gmap_canvas {
+              overflow:hidden;
+              background:none!important;
+              height:500px;
+              width:100% !important;
+          }
+          
+          .gmap_canvas iframe { 
+               width:100%;
+               height: 500px; 
+          }
+      </style>
+  </head>
+  <body> 
+      <div class="container mt-2">
+      <h4>DRONE MONITORING</h4> 
+          
+      <div class="row"> 
+        <div class="col-sm-6 room">
+        
+            <img class="img" src="/viewimage.jpg">
+            
+            
+        </div>
+        <div class="col-sm-6 room"> 
+            <div class="container">  
+                <div class="form-group mt-3">
+                    <button type="button" class="btn btn-success ctrl-button">Fly</button>
+                    <button type="button" class="btn btn-danger ctrl-button">Land</button> 
+                </div>
+                    
+                <hr>
+                 
+                <div class="form-group">
+                    <button type="button" class="btn btn-info ctrl-button">RIGHT</button> 
+                    <button type="button" class="btn btn-info ctrl-button">FORWARD</button> 
+                    <button type="button" class="btn btn-info ctrl-button">LEFT</button> 
+                </div>
+                  
+                <div class="form-group">
+                    <button type="button" class="btn btn-info ctrl-button">DOWN</button> 
+                    <button type="button" class="btn btn-info ctrl-button">UP</button> 
+                    <button type="button" class="btn btn-info ctrl-button">BACK</button> 
+                </div>
+                 
+                <hr>
+                
+                <div class="form-group mt-3">
+                    <button type="button" class="btn btn-outline-success">TOP CAMERA</button>
+                    <button type="button" class="btn btn-outline-warning">BOTTOM CAMERA</button>
+                </div> 
+                
+                <hr>
+                 
+              <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col head-flying" >Control</th>
+                      <th scope="col">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr> 
+                      <td>Control</td>
+                      <td>up</td> 
+                    </tr>   
+                    <tr> 
+                      <td>Status</td>
+                      <td>flying</td>
+                    </tr> 
+                      <tr> 
+                      <td>Camera</td>
+                      <td>top</td>
+                    </tr>  
+                
+              </tbody>
+            </table>
+            
+                
+            </div> 
+        </div> 
+          <div class="col-sm-6 room"> 
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">NavData</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr> 
+                  <td>header</td>
+                  <td>Header</td>
+                  <td>ROS header</td>
+                </tr>   
+                <tr> 
+                  <td>batteryPercentage</td>
+                  <td>float32</td>
+                  <td>0% to 100%</td>
+                </tr>  
+                <tr> 
+                  <td>rotX</td>
+                  <td>float32</td>
+                  <td>left/right tilt</td>
+                </tr>   
+                <tr> 
+                  <td>rotY</td>
+                  <td>float32</td>
+                  <td>forward/backward tilt</td>
+                </tr>   
+                <tr> 
+                  <td>rotZ</td>
+                  <td>float32</td>
+                  <td>orientation, yaw</td>
+                </tr>   
+                <tr> 
+                  <td>altd</td>
+                  <td>float32</td>
+                  <td>estimated altitude</td>
+                </tr>   
+                <tr> 
+                  <td>vx</td>
+                  <td>float32</td>
+                  <td>linear x velocity</td>
+                </tr>   
+                <tr> 
+                  <td>vx</td>
+                  <td>float32</td>
+                  <td>linear x velocity</td>
+                </tr>   
+                <tr> 
+                  <td>vy</td>
+                  <td>float32</td>
+                  <td>linear y velocity</td>
+                </tr>   
+                <tr> 
+                  <td>vz</td>
+                  <td>float32</td>
+                  <td>linear z velocity</td>
+                </tr>   
+                <tr> 
+                  <td>accx</td>
+                  <td>float32</td>
+                  <td>body x acceleration</td>
+                </tr>   
+                <tr> 
+                  <td>accy</td>
+                  <td>float32</td>
+                  <td>body y acceleration</td>
+                </tr>   
+                <tr> 
+                  <td>accz</td>
+                  <td>float32</td>
+                  <td>body z acceleration</td>
+                </tr>   
+                <tr> 
+                  <td>gyrox</td>
+                  <td>float32</td>
+                  <td>angle rate about x axis</td>
+                </tr>   
+                <tr> 
+                  <td>gyroy</td>
+                  <td>float32</td>
+                  <td>angle rate about y axis</td>
+                </tr>   
+                <tr> 
+                  <td>gyroz</td>
+                  <td>float32</td>
+                  <td>angle rate about x axis</td>
+                </tr>   
+                <tr> 
+                  <td>tm</td>
+                  <td>float32</td>
+                  <td>time stamp from ardrone</td>
+                </tr>   
+              </tbody>
+            </table>
+            
+            
+            
+            
+        </div>
+           <div class="col-sm-6 room" >
+              <div class="mapouter">
+                  <div class="gmap_canvas">
+                      <iframe style="" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=iligan%20city%20philippines&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                      <a href="https://www.divi-discounts.com"></a>
+                  </div> 
+               </div>
+           </div>
+        </div>
+    </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
