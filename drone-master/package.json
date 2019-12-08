@@ -34,6 +34,7 @@
     },
     "dependencies": {
         "buffy": "0.0.4",
+        "dronestream": "^1.1.1",
         "ffmpeg": "0.0.4",
         "file-system": "^2.2.2",
         "rimraf": "^3.0.0",
