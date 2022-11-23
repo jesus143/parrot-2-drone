@@ -30,7 +30,7 @@
         "axios": "^0.19",
         "http": "0.0.0",
         "ioredis": "^3.2.2",
-        "socket.io": "^2.1.1"
+        "socket.io": "^2.5.0"
     },
     "dependencies": {
         "buffy": "0.0.4",
